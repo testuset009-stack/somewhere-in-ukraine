@@ -93,6 +93,13 @@ circle at center,
 #e6dcc2 100%
 );
 }
+#waiting-screen.theme-vyshyvanka {
+background: radial-gradient(
+circle at center,
+#f7f0e3 0%,
+#e6d8be 100%
+);
+}
 .wait-box {
 width: 90%;
 max-width: 880px;
@@ -111,6 +118,13 @@ outline: 1.5px solid #b58b42;
 outline-offset: -11px;
 box-shadow: 0 24px 60px rgba(7, 46, 27, 0.18);
 }
+#waiting-screen.theme-vyshyvanka .wait-box {
+background: rgba(253, 250, 243, 0.97);
+border: 4px solid #b91c1c;
+outline: 2px dashed #1c1917;
+outline-offset: -11px;
+box-shadow: 0 24px 60px rgba(127, 29, 29, 0.16);
+}
 .wait-title {
 font-size: 52px;
 font-size: clamp(32px, 5vw, 68px);
@@ -124,6 +138,11 @@ font-family: Georgia, serif;
 color: #072e1b;
 letter-spacing: 0.06em;
 }
+#waiting-screen.theme-vyshyvanka .wait-title {
+font-family: Georgia, serif;
+color: #1c1917;
+letter-spacing: 0.06em;
+}
 .wait-sub {
 font-size: 18px;
 font-size: clamp(13px, 1.5vw, 20px);
@@ -135,6 +154,9 @@ margin-bottom: 18px;
 #waiting-screen.theme-pub .wait-sub {
 color: #b91604;
 }
+#waiting-screen.theme-vyshyvanka .wait-sub {
+color: #b91c1c;
+}
 .wait-hint {
 font-size: 18px;
 font-size: clamp(14px, 1.5vw, 20px);
@@ -143,6 +165,9 @@ margin-bottom: 28px;
 }
 #waiting-screen.theme-pub .wait-hint {
 color: #3d5a49;
+}
+#waiting-screen.theme-vyshyvanka .wait-hint {
+color: #5c4330;
 }
 .wait-actions {
 display: flex;
@@ -165,6 +190,11 @@ background: #072e1b;
 border-color: #b58b42;
 color: #f4f7f5;
 }
+#waiting-screen.theme-vyshyvanka .wait-btn {
+background: #1c1917;
+border-color: #b91c1c;
+color: #fdfaf3;
+}
 .wait-btn.sound-on {
 background: #064e3b;
 border-color: #10b981;
@@ -174,6 +204,11 @@ background: #14532d;
 border-color: #072e1b;
 color: #fdfaf1;
 }
+#waiting-screen.theme-vyshyvanka .wait-btn.sound-on {
+background: #b91c1c;
+border-color: #1c1917;
+color: #fdfaf3;
+}
 .wait-btn.host-accent {
 background: #b45309;
 border-color: #fbbf24;
@@ -182,6 +217,11 @@ border-color: #fbbf24;
 background: #b91604;
 border-color: #072e1b;
 color: #fdfaf1;
+}
+#waiting-screen.theme-vyshyvanka .wait-btn.host-accent {
+background: #991b1b;
+border-color: #1c1917;
+color: #fdfaf3;
 }
 #debug-host-frame {
 position: fixed;

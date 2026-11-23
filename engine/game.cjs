@@ -1019,20 +1019,12 @@ saveDb();
 }
 
 // compute and show distance hint on tv
-// validates manual tier against allowed set
+// always subtracts 20 pts in any order
 function giveDistanceHint(guessedCode, manualTier) {
 var room = requireRoom();
 var cq = room.round.currentQuestion;
 if (room.round.phase !== 'asking' || !cq) {
 throw new Error('No active question');
-}
-if (
-room.gameMode !== 'coop' &&
-!cq.canShowHint
-) {
-throw new Error(
-'Wrong answer required before hint'
-);
 }
 var tier = VALID_TIERS[manualTier]
 ? manualTier
@@ -1059,17 +1051,10 @@ throw new Error('Invalid hint tier');
 saveUndo(room);
 cq.hintCount += 1;
 room.round.hintsTotal += 1;
-if (cq.part2Revealed) {
 cq.currentValue = Math.max(
 config.MIN_FINAL_POINTS,
-cq.currentValue - config.EXTRA_HINT_AFTER_P2
-);
-} else {
-cq.currentValue = Math.max(
-config.MIN_HINT_POINTS,
 cq.currentValue - config.HINT_PENALTY
 );
-}
 cq.lastHint = {
 guessedCode: cleanCode || null,
 tier: tier,
@@ -1084,7 +1069,7 @@ saveDb();
 }
 
 // reveal second part of double question
-// requires prior hint and halves points
+// halves current points in any hint order
 function revealPart2() {
 var room = requireRoom();
 var cq = room.round.currentQuestion;
@@ -1094,23 +1079,15 @@ throw new Error('No active question');
 if (!cq.hasPart2) {
 throw new Error('Not a double question');
 }
-if (
-room.gameMode !== 'coop' &&
-cq.hintCount < 1
-) {
-throw new Error(
-'Give distance hint before part 2'
-);
-}
 if (cq.part2Revealed) {
 return;
 }
 saveUndo(room);
 cq.part2Revealed = true;
 cq.isHalfValue = true;
-cq.currentValue = Math.min(
-cq.currentValue,
-config.DOUBLE_PART2_POINTS
+cq.currentValue = Math.max(
+config.MIN_FINAL_POINTS,
+Math.floor(cq.currentValue / 2)
 );
 pushEvent('part2_revealed', {
 currentValue: cq.currentValue

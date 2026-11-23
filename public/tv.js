@@ -75,6 +75,7 @@ if (
 document.visibilityState === 'visible'
 ) {
 keepAwake();
+kickRender();
 }
 }
 );
@@ -185,6 +186,11 @@ playTone(1568, 0.45, 0.38, 'sine', 0.16);
 playTone(440, 0.22, 0, 'triangle', 0.15);
 playTone(554, 0.22, 0.11, 'triangle', 0.15);
 playTone(659, 0.36, 0.22, 'sine', 0.17);
+} else if (theme === 'vyshyvanka') {
+playTone(587, 0.18, 0, 'triangle', 0.15);
+playTone(740, 0.18, 0.09, 'triangle', 0.15);
+playTone(880, 0.22, 0.18, 'triangle', 0.16);
+playTone(1175, 0.38, 0.27, 'sine', 0.16);
 } else {
 playTone(523, 0.16, 0, 'triangle', 0.16);
 playTone(659, 0.16, 0.11, 'triangle', 0.16);
@@ -263,6 +269,9 @@ hostOpen = !hostOpen;
 hostFrame.style.display = hostOpen
 ? 'block'
 : 'none';
+if (!hostOpen) {
+kickRender();
+}
 }
 
 window.addEventListener(
@@ -277,6 +286,7 @@ hostOpen = false;
 if (hostFrame) {
 hostFrame.style.display = 'none';
 }
+kickRender();
 }
 }
 );
@@ -400,6 +410,8 @@ raf(drawStep);
 }
 }
 
+// draw one canvas frame and re-queue
+// checks anim after draw so fade clears
 function drawStep() {
 rafPending = false;
 if (
@@ -408,20 +420,26 @@ window.TV_RENDERER &&
 latestState &&
 latestState.room
 ) {
-var anim =
+var checkAnim =
 typeof window.TV_RENDERER.needsAnimation ===
-'function'
+'function';
+var animBefore = checkAnim
 ? window.TV_RENDERER.needsAnimation(
 latestState
 )
 : true;
-if (needsDraw || anim) {
+if (needsDraw || animBefore) {
 needsDraw = false;
 window.TV_RENDERER.render(
 ctx,
 latestState
 );
-if (anim) {
+var animAfter = checkAnim
+? window.TV_RENDERER.needsAnimation(
+latestState
+)
+: true;
+if (animAfter) {
 rafPending = true;
 raf(drawStep);
 }
@@ -477,8 +495,17 @@ playEventSound(evs[i].type, theme);
 }
 }
 }
+var animNow =
+window.TV_RENDERER &&
+typeof window.TV_RENDERER.needsAnimation ===
+'function' &&
+window.TV_RENDERER.needsAnimation(
+latestState
+);
 if (changed) {
 syncWaitingOverlay();
+kickRender();
+} else if (animNow) {
 kickRender();
 }
 } catch (e) {}

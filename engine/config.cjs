@@ -3,17 +3,15 @@
 module.exports = {
 BASE_POINTS: 100,
 HINT_PENALTY: 20,
-MIN_HINT_POINTS: 40,
-DOUBLE_PART2_POINTS: 50,
-EXTRA_HINT_AFTER_P2: 10,
-MIN_FINAL_POINTS: 20,
+MIN_FINAL_POINTS: 10,
 NEIGHBOR_BONUS: 20,
 MAX_EVENTS: 50,
 THEMES: [
 'standard',
 'dark',
 'christmas',
-'pub'
+'pub',
+'vyshyvanka'
 ],
 DUEL_TEAMS: [
 {

@@ -37,6 +37,35 @@ alpha: 0.28 + Math.random() * 0.62
 // return color tokens for active theme
 // maps pub, standard, dark, and christmas
 function getThemePalette(theme) {
+if (theme === 'vyshyvanka') {
+return {
+seaTop: '#f6efe2',
+seaBot: '#eadec8',
+grid: 'rgba(138,102,66,0.085)',
+land: '#e3d5bc',
+border: '#4a3222',
+paintedBorder: '#fdfaf3',
+panelBg: 'rgba(253,250,243,0.97)',
+panelBorder: '#b91c1c',
+innerTrim: '#1c1917',
+panelText: '#1c1917',
+mutedText: '#6b4f3a',
+accent: '#b91c1c',
+accentText: '#fdfaf3',
+part2Bg: 'rgba(185,28,28,0.08)',
+part2Border: '#b91c1c',
+badgeBg: '#b91c1c',
+badgeText: '#fdfaf3',
+ptsFullBg: '#166534',
+ptsHalfBg: '#b91c1c',
+revealColor: '#166534',
+activeRowBg: 'rgba(185,28,28,0.09)',
+finishMapBg: 'rgba(28,25,23,0.045)',
+headingFont: 'Georgia, serif',
+floatStroke: 'rgba(28,25,23,0.94)',
+floatFill: '#fdfaf3'
+};
+}
 if (theme === 'pub') {
 return {
 seaTop: '#f8f3e6',
@@ -881,8 +910,181 @@ y - 2,
 );
 }
 
+// draw one ukrainian cross-stitch cell
+// crosses two crisp diagonal threads
+function drawCrossStitch(
+ctx,
+x,
+y,
+sz,
+col
+) {
+var pad = sz * 0.14;
+ctx.strokeStyle = col;
+ctx.lineWidth = Math.max(1.3, sz * 0.27);
+ctx.lineCap = 'round';
+ctx.beginPath();
+ctx.moveTo(x + pad, y + pad);
+ctx.lineTo(x + sz - pad, y + sz - pad);
+ctx.moveTo(x + sz - pad, y + pad);
+ctx.lineTo(x + pad, y + sz - pad);
+ctx.stroke();
+}
+
+// render pixel grid as cross-stitch art
+// maps R crimson, B charcoal, G ochre
+function drawStitchMatrix(
+ctx,
+ox,
+oy,
+cell,
+rows
+) {
+var cols = {
+R: '#b91c1c',
+B: '#1c1917',
+G: '#b45309'
+};
+for (var r = 0; r < rows.length; r++) {
+var row = rows[r];
+for (var c = 0; c < row.length; c++) {
+var ch = row.charAt(c);
+var col = cols[ch];
+if (!col) continue;
+drawCrossStitch(
+ctx,
+ox + c * cell,
+oy + r * cell,
+cell,
+col
+);
+}
+}
+}
+
+// draw traditional vyshyvanka frame art
+// stitches rushnyk borders and star rozha
+function drawVyshyvankaDecor(ctx) {
+ctx.save();
+var cell = 4;
+
+// subtle woven linen micro-thread lines
+// gives raw flax cloth texture under map
+ctx.strokeStyle = 'rgba(138,102,66,0.05)';
+ctx.lineWidth = 1;
+for (var lx = 24; lx < W; lx += 36) {
+ctx.beginPath();
+ctx.moveTo(lx, 0);
+ctx.lineTo(lx, H);
+ctx.stroke();
+}
+for (var ly = 24; ly < H; ly += 36) {
+ctx.beginPath();
+ctx.moveTo(0, ly);
+ctx.lineTo(W, ly);
+ctx.stroke();
+}
+
+var hTile = [
+'BBBBBBBBBBBB',
+'..R..RR..R..',
+'.RBRRRRRRBR.',
+'RBRRBGGRBRBR',
+'.RBRRRRRRBR.',
+'..R..RR..R..',
+'BBBBBBBBBBBB'
+];
+var tileW = 12 * cell;
+ctx.globalAlpha = 0.88;
+for (var hx = 12; hx < W - 56; hx += tileW) {
+drawStitchMatrix(ctx, hx, 6, cell, hTile);
+drawStitchMatrix(
+ctx,
+hx,
+H - 6 - 7 * cell,
+cell,
+hTile
+);
+}
+
+var vTile = [
+'B.R.B',
+'BRBRB',
+'BRGRB',
+'BRBRB',
+'B.R.B',
+'B...B',
+'B.B.B',
+'B...B'
+];
+var tileH = 8 * cell;
+for (var vy = 40; vy < H - 70; vy += tileH) {
+drawStitchMatrix(ctx, 6, vy, cell, vTile);
+drawStitchMatrix(
+ctx,
+W - 6 - 5 * cell,
+vy,
+cell,
+vTile
+);
+}
+
+// eight-pointed ukrainian rozha star
+// accents open right corners cleanly
+var star = [
+'.....B.....',
+'..R..R..R..',
+'.RBR.R.RBR.',
+'..RRRRRRR..',
+'...RBRBR...',
+'BRRRBGGRRBB',
+'...RBRBR...',
+'..RRRRRRR..',
+'.RBR.R.RBR.',
+'..R..R..R..',
+'.....B.....'
+];
+ctx.globalAlpha = 0.78;
+drawStitchMatrix(ctx, W - 96, 48, 5.5, star);
+drawStitchMatrix(
+ctx,
+W - 96,
+H - 112,
+5.5,
+star
+);
+ctx.restore();
+}
+
+// draw mini embroidered ribbon on score
+// crowns scoreboard card on vyshyvanka
+function drawVyshScoreCrest(ctx, x, y, w) {
+var crest = [
+'....R..R....',
+'..RBRRRBBR..',
+'RBRRBGGRRRBR',
+'..RBRRRBBR..',
+'....R..R....'
+];
+var cell = 4;
+var cw = 12 * cell;
+var startX = x + (w - cw * 3) / 2;
+ctx.save();
+ctx.globalAlpha = 0.9;
+for (var i = 0; i < 3; i++) {
+drawStitchMatrix(
+ctx,
+startX + i * cw,
+y - 11,
+cell,
+crest
+);
+}
+ctx.restore();
+}
+
 // draw sea background and theme decor
-// picks snow/garlands or pub hop vines
+// picks snow, pub vines, or vyshyvanka
 function drawBackdrop(ctx, pal, theme, now) {
 var grad = ctx.createLinearGradient(
 0,
@@ -914,6 +1116,8 @@ if (theme === 'christmas') {
 drawSideChristmasDecor(ctx, now);
 } else if (theme === 'pub') {
 drawPubDecor(ctx);
+} else if (theme === 'vyshyvanka') {
+drawVyshyvankaDecor(ctx);
 }
 }
 
@@ -1056,8 +1260,53 @@ h: 1010
 };
 }
 
-// draw floating upward country name
-// scales up and fades out after fill
+// draw geographic regional center circle
+// marks exact capital spot on open oblast
+function drawCapitalDot(ctx, pc, mapBox) {
+var rawX =
+typeof pc.capX === 'number'
+? pc.capX
+: pc.cx;
+var rawY =
+typeof pc.capY === 'number'
+? pc.capY
+: pc.cy;
+var x = projX(rawX, mapBox);
+var y = projY(rawY, mapBox);
+var isKyiv = pc.code === 'KV';
+ctx.save();
+if (isKyiv) {
+ctx.beginPath();
+ctx.arc(x, y, 7.5, 0, Math.PI * 2);
+ctx.fillStyle = 'rgba(15,23,42,0.85)';
+ctx.fill();
+ctx.beginPath();
+ctx.arc(x, y, 5.4, 0, Math.PI * 2);
+ctx.fillStyle = '#ffffff';
+ctx.fill();
+ctx.beginPath();
+ctx.arc(x, y, 2.7, 0, Math.PI * 2);
+ctx.fillStyle = '#b91c1c';
+ctx.fill();
+} else {
+ctx.beginPath();
+ctx.arc(x, y, 5.6, 0, Math.PI * 2);
+ctx.fillStyle = 'rgba(15,23,42,0.82)';
+ctx.fill();
+ctx.beginPath();
+ctx.arc(x, y, 3.8, 0, Math.PI * 2);
+ctx.fillStyle = '#ffffff';
+ctx.fill();
+ctx.beginPath();
+ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+ctx.fillStyle = '#0f172a';
+ctx.fill();
+}
+ctx.restore();
+}
+
+// draw floating upward region name
+// dissolves cleanly and clears state
 function drawFloatingRevealLabel(
 ctx,
 mapBox,
@@ -1069,16 +1318,19 @@ if (!animState.revealCode) {
 return;
 }
 var elapsed = now - animState.revealStartMs;
-if (
-elapsed < animState.revealDuration ||
-elapsed >
+var totalMs =
 animState.revealDuration +
-animState.labelDuration
-) {
+animState.labelDuration;
+if (elapsed < animState.revealDuration) {
+return;
+}
+if (elapsed >= totalMs) {
+animState.revealCode = null;
 return;
 }
 var lc = findMapCountry(animState.revealCode);
 if (!lc) {
+animState.revealCode = null;
 return;
 }
 var lt =
@@ -1110,7 +1362,7 @@ ctx.restore();
 }
 
 // render ukraine oblast contour map
-// skips permanent names until guessed
+// draws geographic capital dot when open
 function drawMap(ctx, room, pal, now) {
 if (!window.UKRAINE_MAP) {
 return;
@@ -1198,6 +1450,9 @@ traceCountry(ctx, pc, mapBox);
 ctx.strokeStyle = pal.paintedBorder;
 ctx.lineWidth = 2.2;
 ctx.stroke();
+if (!isRevealing) {
+drawCapitalDot(ctx, pc, mapBox);
+}
 }
 
 if (
@@ -1231,11 +1486,13 @@ ctx.restore();
 }
 }
 
+if (animState.hintCode) {
 if (
-animState.hintCode &&
-now - animState.hintStartMs <
+now - animState.hintStartMs >=
 animState.hintDuration
 ) {
+animState.hintCode = null;
+} else {
 var hc = findMapCountry(animState.hintCode);
 if (hc) {
 var hx = projX(hc.cx, mapBox);
@@ -1263,6 +1520,7 @@ Math.PI * 2
 );
 ctx.stroke();
 ctx.restore();
+}
 }
 }
 
@@ -1373,6 +1631,8 @@ if (theme === 'christmas') {
 drawScoreboardGarland(ctx, x, y, boxW, now);
 } else if (theme === 'pub') {
 drawPubScoreCrest(ctx, x, y, boxW);
+} else if (theme === 'vyshyvanka') {
+drawVyshScoreCrest(ctx, x, y, boxW);
 }
 return;
 }
@@ -1483,6 +1743,8 @@ if (theme === 'christmas') {
 drawScoreboardGarland(ctx, x, y, boxW, now);
 } else if (theme === 'pub') {
 drawPubScoreCrest(ctx, x, y, boxW);
+} else if (theme === 'vyshyvanka') {
+drawVyshScoreCrest(ctx, x, y, boxW);
 }
 }
 
@@ -1828,6 +2090,7 @@ p2y += 34;
 
 if (
 cq.lastHint &&
+animState.hintCode &&
 now - animState.hintStartMs <
 animState.hintDuration
 ) {
@@ -2037,7 +2300,7 @@ ctx.restore();
 }
 
 // check if tv canvas needs live frames
-// saves cpu on static themes when idle
+// stays true until clean frame clears
 function needsAnimation(state) {
 if (!state || !state.room) {
 return false;
@@ -2045,19 +2308,10 @@ return false;
 if (state.room.theme === 'christmas') {
 return true;
 }
-var now = Date.now();
-if (
-animState.revealCode &&
-now - animState.revealStartMs <
-animState.labelDuration + 120
-) {
+if (animState.revealCode) {
 return true;
 }
-if (
-animState.hintCode &&
-now - animState.hintStartMs <
-animState.hintDuration + 120
-) {
+if (animState.hintCode) {
 return true;
 }
 return false;

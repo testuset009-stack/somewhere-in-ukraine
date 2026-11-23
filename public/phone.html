@@ -7,7 +7,7 @@ name="viewport"
 content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
 >
 <title>Десь в Україні — Пульт</title>
-<link rel="stylesheet" href="phone.css">
+<link rel="stylesheet" href="phone.css?v=2">
 </head>
 <body>
 <div
@@ -156,6 +156,11 @@ id="new-theme-pub"
 type="button"
 class="pill-btn"
 >Паб</button>
+<button
+id="new-theme-vysh"
+type="button"
+class="pill-btn"
+>Вишиванка</button>
 </div>
 </div>
 
@@ -402,6 +407,30 @@ style="background:#b45309;border-color:#f59e0b;color:#fff;"
 </div>
 
 <div
+class="row-list"
+style="margin-top:8px;"
+>
+<button
+id="btn-toggle-geo-hint"
+type="button"
+class="pill-btn"
+style="border-color:#38bdf8;color:#bae6fd;"
+>🧭 Географія (-20)</button>
+<button
+id="btn-reveal-part2"
+type="button"
+class="pill-btn"
+style="border-color:#f59e0b;color:#fde68a;"
+>💡 Підказка з питання (½)</button>
+</div>
+
+<div
+id="last-hint-pill"
+class="hint-result-pill"
+style="display: none;margin-top:8px;"
+></div>
+
+<div
 id="hint-controls-box"
 style="display: none;margin-top:10px;padding-top:10px;border-top:1px solid #334155;"
 >
@@ -410,11 +439,6 @@ id="lbl-hint-title"
 class="panel-title"
 style="color:#38bdf8;"
 >Distance Hint</div>
-<div
-id="last-hint-pill"
-class="hint-result-pill"
-style="display: none;"
-></div>
 <input
 id="hint-country-search"
 type="text"
@@ -449,22 +473,6 @@ class="pill-btn"
 style="border-color:#38bdf8;color:#bae6fd;"
 >Far</button>
 </div>
-</div>
-
-<div
-id="part2-unlock-box"
-style="display: none;margin-top:8px;"
->
-<button
-id="btn-reveal-part2"
-type="button"
-class="btn btn-warning"
->🔍 Reveal Part 2 (½ pts)</button>
-<div
-id="part2-locked-tip"
-class="muted"
-style="margin-top:4px;text-align:center;"
-></div>
 </div>
 
 <div class="row-list" style="margin-top:8px;">
@@ -721,7 +729,12 @@ class="pill-btn"
 id="live-theme-pub"
 type="button"
 class="pill-btn"
->Pub</button>
+>Паб</button>
+<button
+id="live-theme-vysh"
+type="button"
+class="pill-btn"
+>Вишиванка</button>
 </div>
 </div>
 
@@ -794,7 +807,7 @@ style="display: none;"
 </div>
 </div>
 
-<script src="i18n-client.js"></script>
-<script src="phone.js"></script>
+<script src="i18n-client.js?v=2"></script>
+<script src="phone.js?v=2"></script>
 </body>
 </html>
