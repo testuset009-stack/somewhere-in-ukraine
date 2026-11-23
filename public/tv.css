@@ -1,0 +1,199 @@
+/* tv stage and waiting splash styles */
+/* scales 1920x1080 container cleanly */
+* {
+box-sizing: border-box;
+}
+html,
+body {
+margin: 0;
+padding: 0;
+width: 100%;
+height: 100%;
+overflow: hidden;
+background: #020617;
+font-family: -apple-system, sans-serif;
+}
+#tv-stage {
+position: fixed;
+top: 0;
+left: 0;
+width: 1920px;
+height: 1080px;
+overflow: hidden;
+background: #090d1a;
+}
+#game-canvas {
+display: block;
+width: 1920px;
+height: 1080px;
+}
+#secret-debug-zone {
+position: fixed;
+top: 0;
+left: 0;
+width: 96px;
+height: 96px;
+z-index: 1490;
+background: transparent;
+}
+#corner-host-btn {
+position: fixed;
+top: 10px;
+left: 10px;
+z-index: 1500;
+background: rgba(15, 23, 42, 0.72);
+color: #f8fafc;
+border: 1.5px solid rgba(148, 163, 184, 0.45);
+border-radius: 10px;
+padding: 7px 12px;
+font-size: 13px;
+font-weight: 700;
+cursor: pointer;
+}
+#corner-host-btn:hover {
+background: rgba(37, 99, 235, 0.85);
+}
+#waiting-screen {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 1000;
+padding: 24px;
+}
+#waiting-screen.theme-standard {
+background: radial-gradient(
+circle at center,
+#1d4ed8 0%,
+#0f2b5c 100%
+);
+}
+#waiting-screen.theme-dark {
+background: radial-gradient(
+circle at center,
+#1e293b 0%,
+#090d1a 100%
+);
+}
+#waiting-screen.theme-christmas {
+background: radial-gradient(
+circle at center,
+#0f3b32 0%,
+#051915 100%
+);
+}
+#waiting-screen.theme-pub {
+background: radial-gradient(
+circle at center,
+#faf6eb 0%,
+#e6dcc2 100%
+);
+}
+.wait-box {
+width: 90%;
+max-width: 880px;
+width: min(90vw, 880px);
+padding: 40px 36px;
+border-radius: 24px;
+background: rgba(9, 13, 22, 0.82);
+border: 2px solid #f59e0b;
+text-align: center;
+box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65);
+}
+#waiting-screen.theme-pub .wait-box {
+background: rgba(253, 250, 241, 0.96);
+border: 3px solid #072e1b;
+outline: 1.5px solid #b58b42;
+outline-offset: -11px;
+box-shadow: 0 24px 60px rgba(7, 46, 27, 0.18);
+}
+.wait-title {
+font-size: 52px;
+font-size: clamp(32px, 5vw, 68px);
+font-weight: 900;
+letter-spacing: 0.08em;
+color: #fef3c7;
+margin-bottom: 10px;
+}
+#waiting-screen.theme-pub .wait-title {
+font-family: Georgia, serif;
+color: #072e1b;
+letter-spacing: 0.06em;
+}
+.wait-sub {
+font-size: 18px;
+font-size: clamp(13px, 1.5vw, 20px);
+font-weight: 800;
+letter-spacing: 0.18em;
+color: #fbbf24;
+margin-bottom: 18px;
+}
+#waiting-screen.theme-pub .wait-sub {
+color: #b91604;
+}
+.wait-hint {
+font-size: 18px;
+font-size: clamp(14px, 1.5vw, 20px);
+color: #cbd5e1;
+margin-bottom: 28px;
+}
+#waiting-screen.theme-pub .wait-hint {
+color: #3d5a49;
+}
+.wait-actions {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+}
+.wait-btn {
+margin: 6px;
+padding: 14px 22px;
+font-size: 16px;
+font-weight: 800;
+color: #f8fafc;
+background: #1e293b;
+border: 2px solid #3b82f6;
+border-radius: 12px;
+cursor: pointer;
+}
+#waiting-screen.theme-pub .wait-btn {
+background: #072e1b;
+border-color: #b58b42;
+color: #f4f7f5;
+}
+.wait-btn.sound-on {
+background: #064e3b;
+border-color: #10b981;
+}
+#waiting-screen.theme-pub .wait-btn.sound-on {
+background: #14532d;
+border-color: #072e1b;
+color: #fdfaf1;
+}
+.wait-btn.host-accent {
+background: #b45309;
+border-color: #fbbf24;
+}
+#waiting-screen.theme-pub .wait-btn.host-accent {
+background: #b91604;
+border-color: #072e1b;
+color: #fdfaf1;
+}
+#debug-host-frame {
+position: fixed;
+top: 10px;
+right: 10px;
+width: 380px;
+max-width: calc(100vw - 20px);
+height: calc(100% - 20px);
+border: 2px solid #f59e0b;
+border-radius: 14px;
+background: #090d16;
+box-shadow: 0 18px 48px rgba(0, 0, 0, 0.85);
+display: none;
+z-index: 2001;
+}

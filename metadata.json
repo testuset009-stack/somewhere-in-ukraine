@@ -1,0 +1,6 @@
+{
+  "name": "Somewhere in Europe",
+  "description": "Universal European map quiz engine for TV display and mobile host controller with UA/EN localization, themes, and Christmas traditions pack.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
